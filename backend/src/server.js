@@ -1,3 +1,4 @@
+//server
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
@@ -16,5 +17,5 @@ app.use("/api/airports", airportRoutes); //tìm sân bay
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`🚀 Server đang chạy tại http://localhost:${PORT}`);
+  console.log(`🚀 Server đang chạy tại http://localhost:${PORT}`);
 });

@@ -20,6 +20,8 @@ const searchFlights = async ({
   departureDate,
   returnDate,
   adults,
+  children,
+  infants,
   travelClass,
   airline,
 }) => {
@@ -32,6 +34,8 @@ const searchFlights = async ({
       destinationLocationCode: destination.toUpperCase(),
       departureDate,
       adults,
+      children,
+      infants,
       travelClass: travelClass || "ECONOMY",
       currencyCode: "VND",
     };
@@ -52,7 +56,11 @@ const searchFlights = async ({
     // 🛠 Chỉ lọc theo hãng bay nếu người dùng có yêu cầu
     if (airline) {
       flights = flights.filter((flight) =>
-        flight.validatingAirlineCodes.includes(airline.toUpperCase())
+        flight.itineraries.some(itinerary =>
+          itinerary.segments.some( segment =>
+            segment.operating.carrierCode == airline.toUpperCase()
+          )
+        )
       );
     }
 

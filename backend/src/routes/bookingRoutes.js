@@ -1,3 +1,4 @@
+//booking route
 const express = require("express");
 const { bookFlight } = require("../controllers/bookingController");
 

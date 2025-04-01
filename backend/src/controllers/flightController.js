@@ -7,6 +7,8 @@ const searchFlights = async (req, res) => {
     departureDate,
     returnDate,
     adults,
+    children,
+    infants,
     travelClass,
     airline,
   } = req.query;
@@ -21,6 +23,8 @@ const searchFlights = async (req, res) => {
     departureDate,
     returnDate,
     adults,
+    children,
+    infants,
     travelClass,
     airline,
   });
