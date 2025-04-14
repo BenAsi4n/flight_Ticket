@@ -1,44 +1,33 @@
 const axios = require("axios");
 require("dotenv").config();
+const auth  = require("./flightAmadeusAuth");
 
-const API_URL = "https://api.api-ninjas.com/v1/airports";
-const API_KEY = process.env.NINJAS_API_KEY;
+const AMADEUS_API_URL =
+  "https://test.api.amadeus.com/v1/reference-data/locations";
 
-const callApi = async (params) => {
-  try {
-    const response = await axios.get(API_URL, {
-      params,
-      headers: { "X-Api-Key": API_KEY },
-    });
-    return response.data;
-  } catch (error) {
-    console.error(
-      "❌ Lỗi khi gọi API Ninjas:",
-      error.response?.data || error.message
-    );
-    return [];
-  }
-};
-
+// 🔍 Tìm sân bay từ Amadeus
 const getAirports = async (keyword) => {
   if (!keyword) return [];
 
-  let result = [];
+  try {
+    const token = await auth.getAccessToken();
+    if (!token) return [];
 
-  // 1️⃣ Tìm theo IATA nếu keyword có 3 ký tự
-  if (keyword.lenght === 3) {
-    result = await callApi({ iata: keyword.toUpperCase() });
+    const response = await axios.get(AMADEUS_API_URL, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        keyword: keyword.trim(),
+        subType: "AIRPORT,CITY", // ✅ đúng format enum của Aadeus
+      },
+    });
+
+    return response.data.data || [];
+  } catch (error) {
+    console.error("❌ Lỗi gọi API Amadeus:", error.response?.data || error.message);
+    return [];
   }
-  // // 2️⃣ Nếu không có kết quả, thử tìm theo tên
-  // if (result.length === 0) {
-  //   result = await callApi({ name: keyword });
-  // }
-  // // 3️⃣ Nếu vẫn không có kết quả, thử tìm theo thành phố
-  // if (result.length === 0) {
-  //   result = await callApi({ city: keyword });
-  // }
-
-  return result;
 };
 
 module.exports = { getAirports };

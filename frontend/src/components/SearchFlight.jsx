@@ -47,7 +47,7 @@ const SearchFlight = ({ onSearch }) => {
   const handleSelectAirport = (field, airport) => {
     setSearchData({
       ...searchData,
-      [field]: `${airport.iata}`,
+      [field]: `${airport.iataCode}`,
     });
     setSuggestions([]);
     setActiveField(null);
@@ -124,7 +124,7 @@ const SearchFlight = ({ onSearch }) => {
                     key={airport.iataCode}
                     onClick={() => handleSelectAirport(field, airport)}
                   >
-                    {airport.name}, {airport.city} - {airport.iata}
+                    {airport.name}, {airport.address.cityName} - {airport.iataCode}
                   </li>
                 ))}
               </ul>
